@@ -9,10 +9,14 @@ import (
 func myWeb(w http.ResponseWriter, r *http.Request) {
 
 	t, _ := template.ParseFiles("./templates/index.html")
+	now := time.Now()
+	timeStr := now.Format("20060102 15:04:05")
 
 	data := map[string]string{
 		"name":    "chiral",
 		"someStr": "这是一个开始",
+		"str1": fmt.Sprintf("当前时间%s", timeStr),
+		"str2": "天气转冷，注意保暖哦~",
 	}
 
 	t.Execute(w, data)
