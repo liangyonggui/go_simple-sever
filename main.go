@@ -35,7 +35,7 @@ func main() {
 
 	fmt.Println("服务器即将开启，访问地址 http://localhost:8080")
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe("0.0.0.0:80", nil)
 	if err != nil {
 		fmt.Println("服务器开启错误: ", err)
 	}
