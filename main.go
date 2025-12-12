@@ -10,13 +10,34 @@ import (
 func myWeb(w http.ResponseWriter, r *http.Request) {
 
 	t, _ := template.ParseFiles("./templates/index.html")
+	// 1. 定义目标日期：2025年9月13日（时区使用本地时区，也可指定UTC）
+	targetDate := time.Date(
+		2025,           // 年
+		time.September, // 月（使用time包的月份常量避免数字错误）
+		13,             // 日
+		0,              // 时
+		0,              // 分
+		0,              // 秒
+		0,              // 纳秒
+		time.Local,     // 时区（Local为本地时区，UTC为世界协调时间）
+	)
+
+	// 2. 获取当前时间（本地时区）
 	now := time.Now()
-	timeStr := now.Format("20060102 15:04:05")
+
+	// 3. 截断当前时间到日期级别（忽略时分秒，只保留年月日）
+	// 避免因当天时间不同导致的天数计算误差（比如当前是23点，目标是0点，直接相减会少算一天）
+	nowTruncated := now.Truncate(24 * time.Hour)
+	targetTruncated := targetDate.Truncate(24 * time.Hour)
+
+	// 4. 计算时间差（纳秒），转换为天数
+	duration := nowTruncated.Sub(targetTruncated)
+	days := int(duration.Hours() / 24)
 
 	data := map[string]string{
-		"name":    "chiral",
-		"someStr": "这是一个开始",
-		"str1": fmt.Sprintf("当前时间%s", timeStr),
+		"name":    "李雪纯",
+		"someStr": "小傻蛋",
+		"str1": fmt.Sprintf("我们已经在一起%d天啦~", days),
 		"str2": "天气转冷，注意保暖哦~",
 	}
 
